@@ -1,11 +1,11 @@
 ---
 title: "Sipsey floodplain 4th corner analysis"
 output:
-  html_notebook:
-    toc: yes
-    toc_float: yes
   html_document:
     df_print: paged
+    toc: yes
+    toc_float: yes
+  html_notebook:
     toc: yes
     toc_float: yes
 ---
