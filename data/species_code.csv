@@ -1,0 +1,29 @@
+species common name,scientific name,code,weland indicator
+american beech,Fagus grandifolia,FAGR,FACU
+american elm,Ulmus americana,ULAM,FAC
+american holly,Ilex opaca,ILOP,FAC
+bitternut hickory,Carya cordiformis,CACO15,FAC
+black gum,Nyssa biflora,NYBI,OBL
+cherrybark oak,Quercus pagoda,QUPA5,FACW
+cow oak,Quercus michauxii,QUMI,FACW
+diamond leaf oak,Quercus laurifolia,QULA3,FACW
+loblolly pine,Pinus taeda,PITA,FAC
+muscle wood,Carpinus caroliniana,CACA18,FAC
+overcup oak,Quercus lyrata,QULY,OBL
+persimmon,Diospyros virginiana,DIVI5,FAC
+red maple,Acer rubrum,ACRU,FAC
+red mulberry,Morus rubra,MORU2,FACU
+river birch,Betula nigra,BENI,FACW
+swamp privet,Forestiera acuminata,FOAC,OBL
+sweetgum,Liquidambar styraciflua,LIST2,FAC
+unknown 10,NA,NA,OBL
+water oak,Quercus nigra,QUNI,FAC
+water tupelo,Nyssa aquatica,NYAQ2,OBL
+willow oak,Quercus phellos,QUPH,FACW
+winged elm,Ulmus alata,ULAL,FACU
+yaupon,Ilex vomitoria,ILVO,FAC
+yellow poplar,Liriodendron tulipifera,LITU,FACU
+black willow,Salix nigra,SANI,OBL
+water hickory,Carya aquatica,CAAQ2,OBL
+bald cypress,Taxodium distichum,TADI2,OBL
+black gum,Nyssa sylvatica,NYBI,OBL
