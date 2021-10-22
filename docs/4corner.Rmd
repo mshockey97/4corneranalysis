@@ -1,13 +1,15 @@
 ---
 title: "Sipsey floodplain 4th corner analysis"
 output:
+  html_notebook:
+    toc: yes
+    toc_float: yes
+    number_sections: true
   html_document:
     df_print: paged
     toc: yes
     toc_float: yes
-  html_notebook:
-    toc: yes
-    toc_float: yes
+    number_sections: true
 ---
 Questions to answer:<br />
 1.)	Where are species found across the floodplain?<br />
@@ -77,7 +79,7 @@ traits=read.csv("data/traitsfinal.csv", row.names = 1)
 abd <- read_csv("data/nmds.csv",col_names = T)
 rownames(abd)<-c(0:49)
 ```
-#Step 2: Explore the data/manyglm model creation<br />
+##Step 2: Explore the data/manyglm model creation<br />
 The goal here is to explore some potential models to see what covarients have a significant effect on tree species distribution.
 ```{r,warning=FALSE,error=TRUE,message=FALSE,fig.show=TRUE}
 #look at abundance across the floodplain
@@ -102,7 +104,7 @@ anova(mod2, p.uni="adjusted", nBoot=99)
 ```
 Initial results are indicating that HAND and distance from river have significant effects on species distribution.
 
-#Step 3 multivarient SDM (https://cran.r-project.org/web/packages/mvabund/mvabund.pdf)\
+###Step 3 multivarient SDM (https://cran.r-project.org/web/packages/mvabund/mvabund.pdf)\
 The simplest form is a multivariate species distribution model (SDM) which predicts the abundance of each species based only on\ the environmental variables. The form of this model is essentially a negative binomial GLM with species as a fixed effect and a\ species by envi interaction.
 ```{r,warning=FALSE,error=TRUE,message=FALSE}
 sdm_fit=traitglm(abd,envi)
@@ -119,7 +121,7 @@ anova.traitglm(sdm_fit)
 ```
 The heat map resulting from this data is a good visual representation of each environmental variables effect on specific\ tree species
 
-#Step 4: Forth corner analysis\
+####Step 4: Forth corner analysis\
 The forth corner analysis functions similarly to the multivarient SDM but looks at the environmental varibles effect on tree\
 traits. The trait data was downloaded from the TRY plant trait database and more data will soon be added from the NEON database.
 ```{r}
