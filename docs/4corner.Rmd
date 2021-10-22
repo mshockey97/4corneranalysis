@@ -21,8 +21,9 @@ Questions to answer:<br />
   a.	Pulled data from the Try trait database for the dominant trees in the forest.<br />
   b.	Ran fourth corner analysis <br />
 See https://heather-grab.github.io/Entom-4940/rql.html for more information on each step\
+\
 #Step 1: Workspace orginization/data read in
-```{r,warning=FALSE,error=TRUE,echo=FALSE,results=FALSE}
+```{r,warning=FALSE,error=TRUE,echo=FALSE,results=FALSE,message=FALSE}
 
 #Gather libraries of interest
 library(tidyverse)
@@ -79,9 +80,9 @@ traits=read.csv("data/traitsfinal.csv", row.names = 1)
 abd <- read_csv("data/nmds.csv",col_names = T)
 rownames(abd)<-c(0:49)
 ```
-##Step 2: Explore the data/manyglm model creation<br />
+#Step 2: Explore the data/manyglm model creation<br />
 The goal here is to explore some potential models to see what covarients have a significant effect on tree species distribution.
-```{r,warning=FALSE,error=TRUE,message=FALSE,fig.show=TRUE}
+```{r,warning=FALSE,error=TRUE,message=FALSE,fig.show=TRUE,results=FALSE}
 #look at abundance across the floodplain
 Tree_spp=mvabund(abd)
 rownames(Tree_spp)<-c(0:49)
@@ -104,11 +105,11 @@ anova(mod2, p.uni="adjusted", nBoot=99)
 ```
 Initial results are indicating that HAND and distance from river have significant effects on species distribution.
 
-###Step 3 multivarient SDM (https://cran.r-project.org/web/packages/mvabund/mvabund.pdf)\
+#Step 3 multivarient SDM (https://cran.r-project.org/web/packages/mvabund/mvabund.pdf)\
 The simplest form is a multivariate species distribution model (SDM) which predicts the abundance of each species based only on\ the environmental variables. The form of this model is essentially a negative binomial GLM with species as a fixed effect and a\ species by envi interaction.
 ```{r,warning=FALSE,error=TRUE,message=FALSE}
 sdm_fit=traitglm(abd,envi)
-sdm_fit$fourth
+
 #plot
 a        = max( abs(sdm_fit$fourth.corner) )
 colort   = colorRampPalette(c("blue","white","red")) 
@@ -121,10 +122,10 @@ anova.traitglm(sdm_fit)
 ```
 The heat map resulting from this data is a good visual representation of each environmental variables effect on specific\ tree species
 
-####Step 4: Forth corner analysis\
+#Step 4: Forth corner analysis\
 The forth corner analysis functions similarly to the multivarient SDM but looks at the environmental varibles effect on tree\
 traits. The trait data was downloaded from the TRY plant trait database and more data will soon be added from the NEON database.
-```{r}
+```{r,warning=FALSE,error=TRUE,message=FALSE}
 
 #forth corner analysis
 traits=traits
@@ -132,7 +133,6 @@ abd4th=abd %>%
   mutate(QUMI=QUMI.1) %>% 
   select(ACRU,CACA18,CACO15,DIVI5,LIST2,QULA3,QUNI,QUMI,ULAM) 
 fit=traitglm(abd4th,envi,traits)
-fit$fourth 
 #print fourth corner terms
 #plot residuals
 plot(fit)
