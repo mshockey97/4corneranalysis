@@ -1,26 +1,26 @@
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#Title: Multievarient GLM and forth corner analysis (https://heather-grab.github.io/Entom-4940/rql.html)
-#Coder: Matt shockey (mshockey97@gmail.com)
-#Date: 10/6/2021
-#Purpose: Determine why trees are where they are
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-#Table of Contents~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Step 1: Setup workspace
-# Step 2: Pull data
-# Step 3: Split by transect/plot
-
-
-
-#Log Notes~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Step 1: Setup workspace-------------------------------------------------------
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-#Clear workspace 
-remove(list=ls())
+---
+title: "Sipsey floodplain 4th corner analysis"
+output:
+  html_notebook:
+    toc: yes
+    toc_float: yes
+  html_document:
+    df_print: paged
+    toc: yes
+    toc_float: yes
+---
+Questions to answer:<br />
+1.)	Where are species found across the floodplain?<br />
+  a.	Simple analysis of plots <br />
+2.)	What are the drivers that are leading to this distribution?<br />
+  a.	Manyglm to test for significant drivers<br />
+  b.	Multivarient SDM (part of the mvabund package)<br />
+3.)	What are the drivers of ecosystem functions in BLH forests (based on the tree species)? The functions I’m looking at are; nutrient uptake (Carbon, Nitrogen, Phosphorus), water storage, and wildlife food production.<br /> 
+  a.	Pulled data from the Try trait database for the dominant trees in the forest.<br />
+  b.	Ran fourth corner analysis <br />
+See https://heather-grab.github.io/Entom-4940/rql.html for more information on each step\
+#Step 1: Workspace orginization/data read in
+```{r,warning=FALSE,error=TRUE,echo=FALSE,results=FALSE}
 
 #Gather libraries of interest
 library(tidyverse)
@@ -34,7 +34,7 @@ library(patchwork)
 library(mvabund)
 library(lattice)
 
-
+setwd("C:\\Users\\Matthew\\Desktop\\sipsydata\\Sipsey_tree_data\\Sipsey_tree\\4corneranalysis\\")
 #read in data
 #species code for later
 spec_code=read.csv("data/species_code.csv")
@@ -76,12 +76,14 @@ traits=read.csv("data/traitsfinal.csv", row.names = 1)
 #load L matrix: the site by species matrix that describes which species occur at each site
 abd <- read_csv("data/nmds.csv",col_names = T)
 rownames(abd)<-c(0:49)
-
-
-#exploring the data---------------------------------------------
+```
+#Step 2: Explore the data/manyglm model creation<br />
+The goal here is to explore some potential models to see what covarients have a significant effect on tree species distribution.
+```{r,warning=FALSE,error=TRUE,message=FALSE,fig.show=TRUE}
 #look at abundance across the floodplain
 Tree_spp=mvabund(abd)
 rownames(Tree_spp)<-c(0:49)
+plot(Tree_spp)
 plot(Tree_spp)
 
 
@@ -94,15 +96,15 @@ mod3=manyglm(Tree_spp~envi$Hand+envi$`Dist.from.river`+envi$plotsd, family = "ne
 plot(mod3)
 
 
-
-
 #hypothesis testing with Anova
 anova(mod3, nBoot=99)
 anova(mod2, p.uni="adjusted", nBoot=99)
+```
+Initial results are indicating that HAND and distance from river have significant effects on species distribution.
 
-
-
-#multivarient SDM (https://cran.r-project.org/web/packages/mvabund/mvabund.pdf)
+#Step 3 multivarient SDM (https://cran.r-project.org/web/packages/mvabund/mvabund.pdf)\
+The simplest form is a multivariate species distribution model (SDM) which predicts the abundance of each species based only on\ the environmental variables. The form of this model is essentially a negative binomial GLM with species as a fixed effect and a\ species by envi interaction.
+```{r,warning=FALSE,error=TRUE,message=FALSE}
 sdm_fit=traitglm(abd,envi)
 sdm_fit$fourth
 #plot
@@ -112,9 +114,15 @@ plot.spp = levelplot(t(as.matrix(sdm_fit$fourth.corner)), xlab="Environmental Va
                      ylab="Species", col.regions=colort(100), at=seq(-a, a, length=100),
                      scales = list( x= list(rot = 45)))
 print(plot.spp)
+#Run ANOVa on the model
 anova.traitglm(sdm_fit)
+```
+The heat map resulting from this data is a good visual representation of each environmental variables effect on specific\ tree species
 
-#Fourth corner analysis--------------------------------
+#Step 4: Forth corner analysis\
+The forth corner analysis functions similarly to the multivarient SDM but looks at the environmental varibles effect on tree\
+traits. The trait data was downloaded from the TRY plant trait database and more data will soon be added from the NEON database.
+```{r}
 
 #forth corner analysis
 traits=traits
@@ -139,18 +147,12 @@ plot.4th = levelplot(t(as.matrix(fit$fourth.corner)), xlab="Environmental Variab
                      scales = list( x= list(rot = 45)))
 print(plot.4th)
 
+#ANOVA
 anova.traitglm(fit)
+```
+The relationships seen in the heat map appear promising. Next steps for me are to:\
+•	Check NEON site for additional data/data we were missing from the Try database. \
+•	Find papers that have paired the physiological traits to a quantifiable function.   
 
-#choosing best model using LASSO (Least Absolute Shrinkage and Selection Operator)
-ft1=traitglm(abd4th,envi,traits,method="glm1path")
-ft1$fourth #notice LASSO penalty has shrunk many interactions to zero
-#plot residuals
-plot(ft1)
-#plot heat map
-a        = max( abs(ft1$fourth.corner) )
-colort   = colorRampPalette(c("blue","white","red")) 
-plot.4th = levelplot(t(as.matrix(ft1$fourth.corner)), xlab="Environmental Variables",
-                     ylab="Species traits", col.regions=colort(100), at=seq(-a, a, length=100),
-                     scales = list( x= list(rot = 45)))
-print(plot.4th)
 
+Note: As I work through the data analysis I'll update this document 
