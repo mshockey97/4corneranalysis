@@ -1,25 +1,31 @@
 ---
 title: "Sipsey floodplain 4th corner analysis"
 output:
+  html_notebook:
+    toc: yes
+    toc_float: yes
+    number_sections: true
   html_document:
     df_print: paged
     toc: yes
     toc_float: yes
     number_sections: true
-  html_notebook:
-    toc: yes
-    toc_float: yes
-    number_sections: true
 ---
-Questions to answer:<br />
-1.)	Where are species found across the floodplain?<br />
-  a.	Simple analysis of plots <br />
-2.)	What are the drivers that are leading to this distribution?<br />
-  a.	Manyglm to test for significant drivers<br />
-  b.	Multivarient SDM (part of the mvabund package)<br />
-3.)	What are the drivers of ecosystem functions in BLH forests (based on the tree species)? The functions I’m looking at are; nutrient uptake (Carbon, Nitrogen, Phosphorus), water storage, and wildlife food production.<br /> 
-  a.	Pulled data from the Try trait database for the dominant trees in the forest.<br />
-  b.	Ran fourth corner analysis <br />
+
+Questions to answer:
+
+1. Where are species found across the floodplain?
+  + a.  Simple analysis of plots 
+
+2. What are the drivers that are leading to this distribution? 
+  + a.	Manyglm to test for significant drivers 
+  + b.	Multivarient SDM (part of the mvabund package)
+
+3. What are the drivers of ecosystem functions in BLH forests (based on the tree species)? The functions I’m looking at are; nutrient uptake (Carbon, Nitrogen, Phosphorus), water storage, and wildlife food production.
+  + a.	Pulled data from the Try trait database for the dominant trees in the forest.
+  + b.	Ran fourth corner analysis    
+
+\
 See https://heather-grab.github.io/Entom-4940/rql.html for more information on each step\
 \
 #Step 1: Workspace orginization/data read in
